@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>United States per capita carbon dioxide emissions decrease in metric tons from 2005-2016</title>
+
+  <!-- don't forget to call all of the stylesheets -->
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cerulean/bootstrap.min.css" rel="stylesheet" integrity="sha384-C++cugH8+Uf86JbNOnQoBweHHAe/wVKN/mb0lTybu/NZ9sEYbd+BbbYtNpWYAsNP" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+  <style>
+    #map {width: 100%;height: calc(40vh);}
+    #about {max-height: calc(80vh);overflow-y: scroll;}
+    /* Small devices (landscape phones, 576px and up) */
+    @media (min-width: 576px) {}
+    /* Medium devices (tablets, 768px and up) */
+    @media (min-width: 768px) {#map {height: calc(60vh);}}
+    /* Large devices (desktops, 992px and up) */
+    @media (min-width: 992px) {#map {height: calc(80vh);}}
+    /* Extra large devices (large desktops, 1200px and up) */
+    @media (min-width: 1200px) {}
+
+      .info
+      {
+            padding: 6px 8px;
+            font: 12px/16px Verdana, Geneva, sans-serif;
+            background: white;
+            background: rgba(255,255,255,1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+
+       .legend {
+            line-height: 45px;
+            padding:1px;
+            color: #555;
+           }
+
+       .legend i {
+            width: 15px;
+            height: 15px;
+            float: left;
+            margin-right: 7px;
+            opacity: 0.7;
+          }
+
+        .circle
+      {
+      float: left;
+      border: 1px solid #222;
+      border-radius: 50%;
+      }
+
+      .legend .colorcircle {
+      border-radius: 50%;
+      width: 15px;
+      height: 15px;
+      margin-top: 0px;
+      }
+      .legend .circlepadding {
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      }
+
+  </style>
+</head>
+
+<body>
+<!-- now that we're in the body of our page, you can see it is broken up into three page sections, which are all held in a fluid div container-->
+
+  <div class="container-fluid">
+    <!-- this section defines the header part of the page, or first 'row'-->
+    <header class="row py-3 bg-primary text-white">
+      <div class="col mx-2">
+        <h1 class="h1">United States per capita decrease of metric ton of CO2 emissions from 2005-2016</h1>
+      </div>
+    </header>
+
+    <!-- this section defines the 'middle' part of the page, broken up into two parts-->
+    <section class="row bg-light">
+      <!-- first, here's the "about" info section on the left-->
+      <aside id="about" class="col-12 col-md-5 col-lg-4 text-dark py-2">
+        <section>
+          <h2 class="h2 text-dark">Greenhouse Gas Emissions Affect on the Earth</h2>
+          <p>The information discussed and the idea behind this map comes from this news article <a href="https://www.dw.com/en/major-emitters-climate-global-heating-saudi-arabia-germany-china-india-us/a-57277948">here</a>.</p>
+          <p>The greenhouse gases being emitted into the air by humans are drastically changing the atmosphere and environment for the worse.
+            A United Nations Enviroment Program report warned that the world must cut emissions by 7.6% annually until 2030 in order to keep temperature incases below the 1.5 degree Celsius ambition outlined in the Paris Agreement. </p>
+          <p>The COVID Pandemic led to a drop in energy use in the United States, but the country is still only second to China in terms of global CO2 emissions.
+          There are regulations set up by the federal government designed to curb greenhouse gas emissions, but the states also play a large role.
+        Each state is set up differently, so the amount of greenhouse gas emissions per state will differ.</p>
+          <p>The Data was acquired from the United States Energy Information Administration and shows the CO2 emissions per state, in metric tons.
+            Each state's emissions are per capita, so the amount of CO2 emitted is adjusted for population.
+          The data shown is the change from 2005 to 2016 in metric tons of CO2 emitted.</p>
+          <p>If there is going to be a significant change in the trajectory of the United States and world greenhouse gas emissions, each state in the U.S. needs to take the problem head on.
+          There needs to be more regulations in place in each state, so that each one can say they are doing their part in decreasing CO2 and greenhouse gas emissions.</p>
+          <p>There are three states on the map, Mississippi, Nebraska, and South Dakota, that do not have circles and this is because they actually increased in per capita metric tons of CO2 emissions between 2005 and 2016.
+          These states and others with small circles have not done a good job of decreasing the amount of CO2 they have been emitting over a 12 year period.</p>
+        </section>
+      </aside>
+
+      <!-- second, here's the map div container, located on the right-->
+      <div class="col-12 col-md-7 col-lg-8 px-0">
+        <div id="map" class="bg-light position-relative"></div>
+      </div>
+    </section>
+
+    <!-- middle section has ended, now here's the page footer-->
+    <footer class="row bg-primary text-white py-3">
+      <div class="col mx-2">
+        <ul class="list-unstyled">
+          <li>Caleb Blackburn</li>
+          <li>May 4, 2021</li>
+          <li><a href="https://www.eia.gov/environment/emissions/state/analysis/">United States Energy Information Administration Source</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div> <!-- end of fluid container -->
+
+  <!--don't forget to call all of the necessary JS libraries -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+
+  <!-- and then you can begin writing your JS for the map -->
+  <script>
+
+  //JS map code goes here
+  var map = L.map('map', {
+      center: [37.0902, -95.7129],
+      zoom: 4
+  });
+
+  var tiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+  minZoom: 0,
+  maxZoom: 20,
+	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> Map By:Caleb Blackburn'
+}).addTo(map);
+
+states = L.geoJson.ajax("assets/data.geojson",{
+pointToLayer: function (feature, x){
+  return L.circleMarker(x, {
+      color: '#28B433',
+      opacity: 1,
+      weight: 2,
+      fillColor: '#28B433',
+      fillOpacity: .6,
+      radius: calcRadius(feature.properties.estimate)
+    }).on({
+            mouseover: function(e){
+              this.setStyle({color: '3BD2BB',fillColor: '3BD2BB'});
+                                  },
+            mouseout: function(e){
+              this.setStyle({color:'#28B433', fillColor: '#28B433'});
+              } })},});
+
+    var minValue = 0.2;
+    var minRadius = 7;
+
+    function calcRadius(val) {
+        return 1.00 * Math.pow(val/minValue,.4) * minRadius;
+        }
+
+states.addTo(map);
+
+L.control.scale({position: 'bottomleft'}).addTo(map);
+
+function getRadius(r) {
+return  r > 18.8 ? 60 :
+       r > 6 ? 30 :
+       r > 1 ? 12 :
+       0;
+}
+
+var legend = L.control({position: 'bottomright'});
+legend.onAdd = function (map) {
+
+var div = L.DomUtil.create('div', 'info legend');
+grades = [5, 18, 40],
+labels = ['<strong>Decrease in Metric Tons of CO2</strong>'],
+categories = ['1','6','20'];
+
+for (var i = 0; i < grades.length; i++) {
+       var grade = grades[i];//*0.5;
+  labels.push(
+       '<i class="circlepadding" style="width: '+Math.max(8,(7-2.2*getRadius(grade)))+'px;"></i> <i style="background: #28B433; width: '+getRadius(grade)*2+'px; height: '+getRadius(grade)*2+'px; border-radius: 50%; margin-top: '+Math.max(0,(9-getRadius(grade)))+'px;"></i><i class="circlepadding" style="width: '+Math.max(2,(25-2*getRadius(grade)))+'px;"></i> ' + categories[i]);
+  }
+div.innerHTML = labels.join('<br>');
+return div;
+};
+legend.addTo(map);
+
+</script>
+
+</body>
+</html>
